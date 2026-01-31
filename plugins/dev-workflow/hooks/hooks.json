@@ -1,0 +1,90 @@
+[
+  {
+    "event": "PreToolUse",
+    "type": "command",
+    "matcher": {
+      "tool_name": "Read"
+    },
+    "hooks": [
+      {
+        "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/scout-block.js"
+      }
+    ]
+  },
+  {
+    "event": "PreToolUse",
+    "type": "command",
+    "matcher": {
+      "tool_name": "Glob"
+    },
+    "hooks": [
+      {
+        "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/scout-block.js"
+      }
+    ]
+  },
+  {
+    "event": "PreToolUse",
+    "type": "command",
+    "matcher": {
+      "tool_name": "Grep"
+    },
+    "hooks": [
+      {
+        "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/scout-block.js"
+      }
+    ]
+  },
+  {
+    "event": "PostToolUse",
+    "type": "prompt",
+    "matcher": {
+      "tool_name": "Write",
+      "file_patterns": [
+        "**/.dev/changes/*/specs/**/*.md"
+      ]
+    },
+    "hooks": [
+      {
+        "prompt_file": "${CLAUDE_PLUGIN_ROOT}/hooks/validate-spec.md"
+      }
+    ]
+  },
+  {
+    "event": "PostToolUse",
+    "type": "prompt",
+    "matcher": {
+      "tool_name": "Bash",
+      "command_pattern": "gh pr create.*"
+    },
+    "hooks": [
+      {
+        "prompt_file": "${CLAUDE_PLUGIN_ROOT}/hooks/post-pr-review.md"
+      }
+    ]
+  },
+  {
+    "event": "PostToolUse",
+    "type": "prompt",
+    "matcher": {
+      "tool_name": "Edit",
+      "file_patterns": [
+        "**/.dev/changes/*/tasks.md"
+      ]
+    },
+    "hooks": [
+      {
+        "prompt_file": "${CLAUDE_PLUGIN_ROOT}/hooks/task-progress.md"
+      }
+    ]
+  },
+  {
+    "event": "Stop",
+    "type": "prompt",
+    "hooks": [
+      {
+        "prompt_file": "${CLAUDE_PLUGIN_ROOT}/hooks/session-summary.md"
+      }
+    ]
+  }
+]

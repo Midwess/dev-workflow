@@ -1,0 +1,14 @@
+{
+  "name": "midwess-dev",
+  "owner": {
+    "name": "TienDang",
+    "email": "team@midwess.com"
+  },
+  "plugins": [
+    {
+      "name": "dev-workflow",
+      "source": "./plugins/dev-workflow",
+      "strict": true
+    }
+  ]
+}
