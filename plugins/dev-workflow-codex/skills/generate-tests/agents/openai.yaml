@@ -1,0 +1,7 @@
+interface:
+  display_name: "Generate Tests"
+  short_description: "Generate test stubs from a proposal or spec domain"
+  default_prompt: "Use $dev-workflow:generate-tests to generate tests from the current dev-workflow specs."
+
+policy:
+  allow_implicit_invocation: false

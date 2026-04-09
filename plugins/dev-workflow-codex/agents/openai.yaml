@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dev Workflow"
+  short_description: "Propose, plan, implement, review, and archive OpenSpec-style changes in Codex"
+  default_prompt: "Use Dev Workflow to initialize .dev, create a proposal, implement tasks, run code review, and prepare a PR."

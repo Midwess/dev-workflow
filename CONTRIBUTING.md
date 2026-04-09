@@ -6,7 +6,7 @@ Thank you for your interest in contributing! This guide will help you add new fe
 
 ### Prerequisites
 
-- [Claude Code](https://claude.ai/code) installed
+- [Claude Code](https://claude.ai/code) or [Codex](https://developers.openai.com/codex/plugins/) installed
 - Git installed
 - GitHub CLI (`gh`) authenticated
 
@@ -28,9 +28,11 @@ Thank you for your interest in contributing! This guide will help you add new fe
    /plugin install dev-workflow@midwess
    ```
 
-4. **Make changes to plugin files**
+4. **For Codex testing, open the repo in Codex and install `dev-workflow` from `/plugins`**
 
-5. **Reload to test:**
+5. **Make changes to plugin files**
+
+6. **Reload to test:**
    ```bash
    /plugin reinstall dev-workflow@midwess
    ```
@@ -38,45 +40,35 @@ Thank you for your interest in contributing! This guide will help you add new fe
 ## Plugin Structure
 
 ```
-plugins/dev-workflow/
-├── .claude-plugin/
-│   └── plugin.json       # Plugin metadata
-├── commands/             # Slash commands (13 files)
-│   ├── init.md
-│   ├── proposal.md
-│   ├── proposal-wizard.md
-│   ├── apply.md
-│   ├── archive.md
-│   ├── undo-archive.md
-│   ├── code-review.md
-│   ├── pr-submit.md
-│   ├── list.md
-│   ├── show.md
-│   ├── status.md
-│   ├── import-issue.md
-│   └── generate-tests.md
-├── agents/               # Review agents (9 files)
-│   ├── code-explorer.md
-│   ├── code-architect.md
-│   ├── bug-detector.md
-│   ├── test-analyzer.md
-│   ├── claude-md-auditor.md
-│   ├── spec-validator.md
-│   ├── comment-analyzer.md
-│   ├── code-simplifier.md
-│   └── history-analyzer.md
-├── hooks/                # Automation hooks
-│   └── hooks.json
-├── skills/               # OpenSpec workflow skill
-│   └── openspec-workflow/
-└── README.md
+plugins/
+├── dev-workflow/               # Claude Code plugin
+│   ├── .claude-plugin/
+│   ├── commands/
+│   ├── agents/
+│   ├── hooks/
+│   ├── skills/
+│   └── README.md
+└── dev-workflow-codex/         # Codex plugin
+    ├── .codex-plugin/
+    ├── commands/
+    ├── agents/
+    ├── skills/
+    └── README.md
+```
+
+Repo-level metadata:
+
+```
+.agents/plugins/marketplace.json  # Codex local marketplace
+.claude-plugin/marketplace.json   # Claude Code marketplace
 ```
 
 ## Adding a Command
 
-1. **Create the command file:**
+1. **Create the command file in the runtime-specific plugin root:**
    ```bash
    touch plugins/dev-workflow/commands/my-command.md
+   touch plugins/dev-workflow-codex/commands/my-command.md
    ```
 
 2. **Write the command:**
@@ -111,9 +103,10 @@ plugins/dev-workflow/
 
 ## Adding an Agent
 
-1. **Create the agent file:**
+1. **Create the agent file in the runtime-specific plugin root:**
    ```bash
    touch plugins/dev-workflow/agents/my-agent.md
+   touch plugins/dev-workflow-codex/agents/my-agent.md
    ```
 
 2. **Write the agent:**
@@ -195,7 +188,10 @@ at once from GitHub projects.
 
 ## Version Updates
 
-When making changes, update `plugins/dev-workflow/.claude-plugin/plugin.json`:
+When making changes, update the manifest for the runtime you changed:
+
+- `plugins/dev-workflow/.claude-plugin/plugin.json`
+- `plugins/dev-workflow-codex/.codex-plugin/plugin.json`
 
 - **Patch** (1.0.X): Bug fixes, minor improvements
 - **Minor** (1.X.0): New features, backward-compatible

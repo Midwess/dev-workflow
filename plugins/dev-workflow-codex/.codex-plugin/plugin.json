@@ -1,0 +1,42 @@
+{
+  "name": "dev-workflow",
+  "version": "1.3.0",
+  "description": "OpenSpec-style spec-driven development workflow for Codex with integrated planning, review, and PR workflows.",
+  "author": {
+    "name": "Midwess",
+    "email": "team@midwess.com",
+    "url": "https://github.com/midwess"
+  },
+  "homepage": "https://github.com/midwess/.ai",
+  "repository": "https://github.com/midwess/.ai",
+  "license": "UNLICENSED",
+  "keywords": [
+    "openspec",
+    "spec-driven",
+    "code-review",
+    "workflow",
+    "proposals",
+    "specifications",
+    "codex"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Dev Workflow",
+    "shortDescription": "Proposal-driven development workflows for Codex",
+    "longDescription": "Use Dev Workflow in Codex for OpenSpec-style change proposals, guided implementation, multi-agent code review, archive operations, test generation, and PR preparation without changing the existing Claude Code plugin.",
+    "developerName": "Midwess",
+    "category": "Coding",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/midwess/.ai",
+    "defaultPrompt": [
+      "Create a dev-workflow proposal for this feature",
+      "Run the dev-workflow code review workflow",
+      "Apply the next tasks from the active dev-workflow change"
+    ],
+    "brandColor": "#2563EB"
+  }
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Archive"
+  short_description: "Merge a completed change into .dev/specs and archive it"
+  default_prompt: "Use $dev-workflow:archive to finalize a completed dev-workflow change."
+
+policy:
+  allow_implicit_invocation: false

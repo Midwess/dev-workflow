@@ -1,0 +1,7 @@
+interface:
+  display_name: "Proposal"
+  short_description: "Create a dev-workflow proposal and the supporting analysis, blueprint, tasks, and delta spec files"
+  default_prompt: "Use $dev-workflow:proposal to create a new dev-workflow proposal for this request."
+
+policy:
+  allow_implicit_invocation: false

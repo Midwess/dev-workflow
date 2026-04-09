@@ -1,0 +1,7 @@
+interface:
+  display_name: "Show"
+  short_description: "Inspect one dev-workflow change and summarize its state"
+  default_prompt: "Use $dev-workflow:show to inspect a specific dev-workflow change."
+
+policy:
+  allow_implicit_invocation: false

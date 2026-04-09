@@ -1,0 +1,7 @@
+interface:
+  display_name: "Undo Archive"
+  short_description: "Restore an archived dev-workflow change back to active work"
+  default_prompt: "Use $dev-workflow:undo-archive to restore an archived dev-workflow change."
+
+policy:
+  allow_implicit_invocation: false

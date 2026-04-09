@@ -1,0 +1,7 @@
+interface:
+  display_name: "Import Issue"
+  short_description: "Turn a GitHub issue or PRD into a dev-workflow proposal"
+  default_prompt: "Use $dev-workflow:import-issue to import an external issue into dev-workflow."
+
+policy:
+  allow_implicit_invocation: false

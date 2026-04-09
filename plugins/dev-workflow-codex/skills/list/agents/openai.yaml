@@ -1,0 +1,7 @@
+interface:
+  display_name: "List"
+  short_description: "List active or archived dev-workflow changes"
+  default_prompt: "Use $dev-workflow:list to show the current dev-workflow changes."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Status"
+  short_description: "Show the current dev-workflow state, progress, and next actions"
+  default_prompt: "Use $dev-workflow:status to inspect the current dev-workflow state."
+
+policy:
+  allow_implicit_invocation: false

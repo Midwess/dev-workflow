@@ -1,0 +1,7 @@
+interface:
+  display_name: "PR Submit"
+  short_description: "Run review, generate a PR description, and create the pull request"
+  default_prompt: "Use $dev-workflow:pr-submit to create a PR for the current dev-workflow change."
+
+policy:
+  allow_implicit_invocation: false

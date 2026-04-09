@@ -1,0 +1,7 @@
+interface:
+  display_name: "Code Review"
+  short_description: "Run the multi-agent dev-workflow review process for a branch or PR"
+  default_prompt: "Use $dev-workflow:code-review to review the current branch with the dev-workflow review agents."
+
+policy:
+  allow_implicit_invocation: false

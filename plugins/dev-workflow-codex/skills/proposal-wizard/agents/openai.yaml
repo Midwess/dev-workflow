@@ -1,0 +1,7 @@
+interface:
+  display_name: "Proposal Wizard"
+  short_description: "Guide proposal creation step by step and generate the standard proposal files"
+  default_prompt: "Use $dev-workflow:proposal-wizard to guide me through creating a new dev-workflow proposal."
+
+policy:
+  allow_implicit_invocation: false

@@ -15,10 +15,22 @@ This plugin provides a structured approach to feature development:
 
 ## Installation
 
-Add to your Claude Code plugins or use via the claudex marketplace.
+Install this plugin in Claude Code. The Codex companion plugin now lives in `plugins/dev-workflow-codex/`.
 
 **Prerequisites:**
 - GitHub CLI (`gh`) authenticated via `gh auth login`
+
+### Claude Code
+
+```bash
+/plugin marketplace add midwess/.ai
+/plugin install dev-workflow@midwess
+```
+
+For Codex, use the separate plugin root:
+
+- `plugins/dev-workflow-codex/.codex-plugin/plugin.json`
+- `.agents/plugins/marketplace.json`
 
 ## Commands
 

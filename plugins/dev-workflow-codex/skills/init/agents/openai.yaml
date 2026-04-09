@@ -1,0 +1,7 @@
+interface:
+  display_name: "Init"
+  short_description: "Bootstrap the .dev workspace for dev-workflow in Codex"
+  default_prompt: "Use $dev-workflow:init to set up dev-workflow in this repository."
+
+policy:
+  allow_implicit_invocation: false

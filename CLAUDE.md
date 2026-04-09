@@ -4,22 +4,31 @@ This file provides guidance to Claude Code when working with code in this reposi
 
 ## Repository Overview
 
-This is the **dev-workflow** plugin - an OpenSpec-style spec-driven development workflow for Claude Code with integrated code review, GitHub integration, and test generation.
+This repository contains the **dev-workflow** plugin suite - an OpenSpec-style spec-driven development workflow for Claude Code and Codex with integrated code review, GitHub integration, and test generation.
 
 ## Plugin Structure
 
 ```
 .
+├── .agents/
+│   └── plugins/
+│       └── marketplace.json      # Codex marketplace configuration
 ├── .claude-plugin/
 │   └── marketplace.json      # Marketplace configuration
 ├── plugins/
-│   └── dev-workflow/         # The dev-workflow plugin
-│       ├── .claude-plugin/
-│       │   └── plugin.json   # Plugin metadata
-│       ├── commands/         # 13 workflow commands
-│       ├── agents/           # 9 review agents
-│       ├── hooks/            # Automation hooks
-│       └── skills/           # OpenSpec workflow skill
+│   ├── dev-workflow/         # The Claude Code plugin
+│   │   ├── .claude-plugin/
+│   │   │   └── plugin.json   # Plugin metadata
+│   │   ├── commands/         # 13 workflow commands
+│   │   ├── agents/           # 9 review agents
+│   │   ├── hooks/            # Automation hooks
+│   │   └── skills/           # OpenSpec workflow skill
+│   └── dev-workflow-codex/   # The Codex plugin
+│       ├── .codex-plugin/
+│       │   └── plugin.json   # Codex plugin metadata
+│       ├── commands/         # Codex-native workflow commands
+│       ├── agents/           # Codex planning/review agents
+│       └── skills/           # Codex skill payloads
 ├── .dev/                     # Dev-workflow for this repo
 ├── README.md
 ├── CONTRIBUTING.md
@@ -74,7 +83,10 @@ System prompt for the agent...
 
 ### Version Updates
 
-Update `plugins/dev-workflow/.claude-plugin/plugin.json`:
+Update the manifest for the runtime you changed:
+- `plugins/dev-workflow/.claude-plugin/plugin.json`
+- `plugins/dev-workflow-codex/.codex-plugin/plugin.json`
+
 - Patch (1.0.X): Bug fixes
 - Minor (1.X.0): New features
 - Major (X.0.0): Breaking changes
@@ -170,12 +182,17 @@ Types: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`
 
 ## Key Files
 
-- **`.claude-plugin/marketplace.json`**: Marketplace registration
+- **`.agents/plugins/marketplace.json`**: Codex marketplace registration
+- **`.claude-plugin/marketplace.json`**: Claude Code marketplace registration
 - **`plugins/dev-workflow/.claude-plugin/plugin.json`**: Plugin metadata
+- **`plugins/dev-workflow-codex/.codex-plugin/plugin.json`**: Codex plugin metadata
 - **`plugins/dev-workflow/commands/*.md`**: Slash commands
 - **`plugins/dev-workflow/agents/*.md`**: Specialized agents
 - **`plugins/dev-workflow/skills/*/SKILL.md`**: Plugin skills
 - **`plugins/dev-workflow/hooks/hooks.json`**: Hook configurations
+- **`plugins/dev-workflow-codex/commands/*.md`**: Codex-native slash commands
+- **`plugins/dev-workflow-codex/agents/*.md`**: Codex agent prompts
+- **`plugins/dev-workflow-codex/skills/*/SKILL.md`**: Codex skill payloads
 
 ## Resources
 

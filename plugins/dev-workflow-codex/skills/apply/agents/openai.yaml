@@ -1,0 +1,7 @@
+interface:
+  display_name: "Apply"
+  short_description: "Implement an approved dev-workflow change and update tasks.md progress"
+  default_prompt: "Use $dev-workflow:apply to continue implementing the current dev-workflow change."
+
+policy:
+  allow_implicit_invocation: false
