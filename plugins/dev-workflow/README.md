@@ -584,11 +584,12 @@ Reason: Deprecated in favor of OAuth
 | `task-progress` | On task completion |
 | `session-summary` | Session end |
 
-### Skills (6 files)
+### Skills (7 files)
 
 | File | Purpose |
 |------|---------|
 | `SKILL.md` | Main skill definition |
+| `minimax-codegen/SKILL.md` | Minimax single-file code generation workflow |
 | `spec-format.md` | Spec format reference |
 | `delta-format.md` | Delta notation reference |
 | `templates/proposal.md` | Proposal template |

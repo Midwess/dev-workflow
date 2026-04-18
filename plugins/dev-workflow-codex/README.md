@@ -58,6 +58,7 @@ Available entry skills include:
 - `$dev-workflow:generate-tests`
 - `$dev-workflow:image-generation`
 - `$dev-workflow:minimax`
+- `$dev-workflow:minimax-codegen`
 
 ## Notes
 

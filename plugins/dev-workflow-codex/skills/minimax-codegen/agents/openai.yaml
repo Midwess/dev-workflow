@@ -1,0 +1,7 @@
+interface:
+  display_name: "Minimax Codegen"
+  short_description: "Use Minimax to rewrite one file from an exact path and intent"
+  default_prompt: "Use $dev-workflow:minimax-codegen to update a specific file with Minimax from an exact file path and an intention-focused request."
+
+policy:
+  allow_implicit_invocation: false
