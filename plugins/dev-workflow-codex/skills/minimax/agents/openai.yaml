@@ -1,0 +1,7 @@
+interface:
+  display_name: "Minimax"
+  short_description: "Run a prompt through the local Claude CLI against Minimax"
+  default_prompt: "Use $dev-workflow:minimax to send a request through the local claude CLI using the Minimax Anthropic-compatible endpoint."
+
+policy:
+  allow_implicit_invocation: false

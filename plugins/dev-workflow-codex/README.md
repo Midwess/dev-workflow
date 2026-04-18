@@ -56,6 +56,8 @@ Available entry skills include:
 - `$dev-workflow:show`
 - `$dev-workflow:import-issue`
 - `$dev-workflow:generate-tests`
+- `$dev-workflow:image-generation`
+- `$dev-workflow:minimax`
 
 ## Notes
 

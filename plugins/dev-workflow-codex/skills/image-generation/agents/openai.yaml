@@ -1,0 +1,7 @@
+interface:
+  display_name: "Image Generation"
+  short_description: "Generate images with Minimax from a prompt"
+  default_prompt: "Use $dev-workflow:image-generation to create images with the Minimax image_generation API."
+
+policy:
+  allow_implicit_invocation: false

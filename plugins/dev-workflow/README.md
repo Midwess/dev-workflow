@@ -72,6 +72,18 @@ For Codex, use the separate plugin root:
 |---------|-------------|
 | `/dev-workflow:generate-tests <change-id>` | Generate test stubs from specs |
 
+### Image Generation
+
+| Command | Description |
+|---------|-------------|
+| `/dev-workflow:image-generation <prompt>` | Generate images with the Minimax image API |
+
+### Minimax Text
+
+| Command | Description |
+|---------|-------------|
+| `/dev-workflow:minimax <request>` | Send a text request through the local `claude` CLI using Minimax |
+
 ## Folder Structure
 
 After running `/dev-workflow:init`:
@@ -188,6 +200,23 @@ After running `/dev-workflow:init`:
 
 # Preview without creating files
 /dev-workflow:generate-tests auth --dry-run
+```
+
+### Image Generation
+
+```bash
+# Generate three image URLs with the default settings
+/dev-workflow:image-generation A man in a white t-shirt, full-body, standing front view, outdoors, with the Venice Beach sign in the background, Los Angeles. Fashion photography in 90s documentary style, film grain, photorealistic.
+
+# Override aspect ratio and image count
+/dev-workflow:image-generation Editorial portrait in Tokyo at night, reflective pavement, cinematic lighting --aspect-ratio 1:1 --count 1
+```
+
+### Minimax Text
+
+```bash
+# Send a text request through the local claude CLI using Minimax
+/dev-workflow:minimax Summarize the architecture of this repository in five bullets.
 ```
 
 ## Code Review
@@ -510,7 +539,7 @@ Reason: Deprecated in favor of OAuth
 
 ## File Summary
 
-### Commands (13 files)
+### Commands (15 files)
 
 | Command | Purpose |
 |---------|---------|
@@ -527,6 +556,8 @@ Reason: Deprecated in favor of OAuth
 | `status` | Workflow state overview |
 | `import-issue` | Import from GitHub/Confluence |
 | `generate-tests` | Generate test stubs from specs |
+| `image-generation` | Generate images with the Minimax image API |
+| `minimax` | Send a text request through the local `claude` CLI using Minimax |
 
 ### Agents (9 files)
 
