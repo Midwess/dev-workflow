@@ -101,3 +101,15 @@ Dual-runtime plugin suite with shared workflow concepts and runtime-specific del
 - This repository already contains active `.dev/changes/` work; refresh `.dev/project.md` without discarding user-authored proposal files.
 - The repo has shifted from a Claude-only plugin to a dual-runtime suite. Any new capability should be evaluated for Claude parity, Codex parity, or an intentional runtime-specific divergence.
 - Hooks remain Claude-specific for now and should be documented that way.
+
+## Latest Analysis
+
+### change-minimax-to-openclaude (2026-04-21)
+
+**Pattern**: Rename-only refactoring for CLI binary name mismatch.
+
+The codebase has 16 files referencing "minimax". Key findings:
+- `minimax.md` command files and `minimax-codegen` skills invoke the `claude` CLI binary which should be `openclaude`
+- `video-generation` and `image-generation` skills use Minimax API directly via curl - no CLI binary involved, no changes needed there
+- Rename requires: 2 command files, 3 skill directories, multiple content updates across READMEs
+- API endpoints and `MINIMAX_API_KEY` env var remain unchanged

@@ -56,7 +56,8 @@ Available entry skills include:
 - `$dev-workflow:show`
 - `$dev-workflow:import-issue`
 - `$dev-workflow:generate-tests`
-- `$dev-workflow:image-generation`
+- `$dev-workflow:image-generation` - text-to-image and image-to-image with S3-uploaded source image URLs
+- `$dev-workflow:video-generation` - image-to-video with background polling until the download URL is ready
 - `$dev-workflow:minimax`
 - `$dev-workflow:minimax-codegen`
 

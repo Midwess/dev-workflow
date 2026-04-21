@@ -1,0 +1,7 @@
+interface:
+  display_name: "Video Generation"
+  short_description: "Generate a Minimax video and poll until the file is ready"
+  default_prompt: "Use $dev-workflow:video-generation to create a Minimax video task, poll until it finishes, and return the final download URL."
+
+policy:
+  allow_implicit_invocation: false

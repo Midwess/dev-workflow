@@ -76,7 +76,7 @@ For Codex, use the separate plugin root:
 
 | Command | Description |
 |---------|-------------|
-| `/dev-workflow:image-generation <prompt>` | Generate images with the Minimax image API |
+| `/dev-workflow:image-generation <prompt>` | Generate images with the Minimax image API, including image-to-image |
 
 ### Minimax Text
 
@@ -210,6 +210,9 @@ After running `/dev-workflow:init`:
 
 # Override aspect ratio and image count
 /dev-workflow:image-generation Editorial portrait in Tokyo at night, reflective pavement, cinematic lighting --aspect-ratio 1:1 --count 1
+
+# Generate from a source image by uploading it to s3://midwess/temporary/ first
+/dev-workflow:image-generation A girl looking into the distance from a library window --source-image ./assets/reference.jpg --aspect-ratio 16:9 --count 2
 ```
 
 ### Minimax Text
@@ -556,7 +559,7 @@ Reason: Deprecated in favor of OAuth
 | `status` | Workflow state overview |
 | `import-issue` | Import from GitHub/Confluence |
 | `generate-tests` | Generate test stubs from specs |
-| `image-generation` | Generate images with the Minimax image API |
+| `image-generation` | Generate images with the Minimax image API, including image-to-image |
 | `minimax` | Send a text request through the local `claude` CLI using Minimax |
 
 ### Agents (9 files)
@@ -584,12 +587,13 @@ Reason: Deprecated in favor of OAuth
 | `task-progress` | On task completion |
 | `session-summary` | Session end |
 
-### Skills (7 files)
+### Skills (8 files)
 
 | File | Purpose |
 |------|---------|
 | `SKILL.md` | Main skill definition |
 | `minimax-codegen/SKILL.md` | Minimax single-file code generation workflow |
+| `video-generation/SKILL.md` | Minimax video generation and polling workflow |
 | `spec-format.md` | Spec format reference |
 | `delta-format.md` | Delta notation reference |
 | `templates/proposal.md` | Proposal template |
