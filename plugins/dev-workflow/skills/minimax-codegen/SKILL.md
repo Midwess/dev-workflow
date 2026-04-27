@@ -1,6 +1,6 @@
 ---
 name: minimax-codegen
-description: Use Minimax as a single-file code generator in Claude. Use when the user gives a file path plus an intention for that file, or wants Minimax to rewrite a specific file without long analysis, review, or extra checking.
+description: Use Minimax as a single-file code generator in OpenClaude. Use when the user gives a file path plus an intention for that file, or wants Minimax to rewrite a specific file without long analysis, review, or extra checking.
 ---
 
 # Minimax Codegen Skill
@@ -29,12 +29,12 @@ Use this skill when:
    - the user's detailed intention
    - instructions to modify only that file
    - a strict output contract
-7. Run Minimax through the local `claude` CLI with:
+7. Run Minimax through the local `openclaude` CLI with:
    - `ANTHROPIC_AUTH_TOKEN="$MINIMAX_API_KEY"`
    - `ANTHROPIC_BASE_URL="https://api.minimax.io/anthropic"`
    - `ANTHROPIC_MODEL="MiniMax-M2.7-highspeed"`
-   - `claude -p "$prompt" --output-format text | json-stream`
-8. If `json-stream` fails, keep the raw `claude` output instead of discarding it.
+   - `openclaude --verbose -p "$prompt" --output-format=text`
+8. If `text` fails, keep the raw `openclaude` output instead of discarding it.
 9. Apply the generated output only to the target file.
 
 ## Prerequisites
@@ -58,8 +58,7 @@ fi
 ```
 
 Also require these commands to exist locally:
-- `claude`
-- `json-stream`
+- `openclaude`
 
 ## Prompting Rules
 
