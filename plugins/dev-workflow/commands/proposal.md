@@ -18,9 +18,44 @@ Check if `.dev/project.md` exists:
 - If not, inform user: "Run `/dev-workflow:init` first to initialize the dev-workflow structure."
 - Stop if not initialized
 
-### 2. Generate change ID
+### 2. Grilling session
 
-Create a kebab-case ID from the description:
+Before any code scanning or ID generation, align on exactly what is being built.
+
+Load `CONTEXT.md` from the repo root if it exists — use its vocabulary throughout. If a term the user uses conflicts with a definition in `CONTEXT.md`, surface it immediately.
+
+Interview the user **one question at a time**. Provide your recommended answer for each question before waiting for their response. Cover:
+
+1. **Problem** — What specific problem does this solve? Who experiences it?
+2. **Scope** — What is explicitly in scope? What is explicitly out of scope?
+3. **Terminology** — Are there domain terms being used that need a precise definition? Challenge vague or overloaded words.
+4. **Affected areas** — Which parts of the system will likely change? (Probe, don't assert — the code scan confirms.)
+5. **Edge cases** — What happens in the failure/edge case for the most important scenario?
+6. **Trade-offs** — Are there architectural choices with real alternatives? (If yes, may warrant an ADR.)
+
+**Rules during grilling:**
+- If a question can be answered by quickly reading the codebase, do so instead of asking
+- When a term is resolved, update `CONTEXT.md` immediately (create it if it doesn't exist)
+- Offer to write an ADR only when a decision is: hard to reverse + surprising without context + result of a real trade-off. Skip otherwise.
+- Stop grilling when scope and language are unambiguous — do not over-interview
+
+**At the end of grilling, produce a brief Grilling Summary:**
+```
+## Grilling Summary
+
+**Problem**: {one sentence}
+**In scope**: {bullet list}
+**Out of scope**: {bullet list}
+**Key terms resolved**: {term: definition, ...}
+**ADRs created**: {list or "none"}
+**Sharpened description**: {refined version of $ARGUMENTS if it changed}
+```
+
+Ask the user to confirm the summary before proceeding.
+
+### 3. Generate change ID
+
+Create a kebab-case ID from the **sharpened description** from the grilling summary (fall back to `$ARGUMENTS` if unchanged):
 - "Add user authentication" → `add-user-authentication`
 - "Fix login bug in dashboard" → `fix-login-bug-in-dashboard`
 - Keep it concise (max ~5 words)
@@ -28,15 +63,15 @@ Create a kebab-case ID from the description:
 Check if `.dev/changes/{change-id}/` already exists:
 - If exists, append numeric suffix: `add-user-auth-2`
 
-### 3. Codebase Analysis (AI-Assisted)
+### 4. Codebase Analysis (AI-Assisted)
 
-Gather deep context using specialized agents before generating the proposal.
+Gather deep context using specialized agents. The grilling summary narrows the scope — pass it to both agents.
 
-#### 3.1 Invoke code-explorer Agent
+#### 4.1 Invoke code-explorer Agent
 
 Launch the `code-explorer` agent with:
-- **Input**: `$ARGUMENTS` (the change description)
-- **Scope**: Identify relevant areas from the description
+- **Input**: sharpened description + grilling summary (scope, affected areas, key terms)
+- **Scope**: Identify relevant areas informed by grilling outcomes
 - **Context**: `.dev/project.md` if exists
 
 The agent will analyze the codebase and return `OUTPUT_CODEBASE_ANALYSIS` containing:
@@ -46,10 +81,10 @@ The agent will analyze the codebase and return `OUTPUT_CODEBASE_ANALYSIS` contai
 - Conventions to follow (naming, testing, error handling)
 - OpenSpec integration notes (affected domains, existing specs)
 
-#### 3.2 Invoke code-architect Agent
+#### 4.2 Invoke code-architect Agent
 
 Launch the `code-architect` agent with:
-- **Input**: `$ARGUMENTS` + `OUTPUT_CODEBASE_ANALYSIS`
+- **Input**: sharpened description + grilling summary + `OUTPUT_CODEBASE_ANALYSIS`
 - **Context**: `.dev/project.md`, existing `.dev/specs/`
 
 The agent will design the architecture and return `OUTPUT_ARCHITECTURE_BLUEPRINT` containing:
@@ -59,15 +94,15 @@ The agent will design the architecture and return `OUTPUT_ARCHITECTURE_BLUEPRINT
 - Delta spec structure recommendations
 - Risks and mitigations
 
-#### 3.3 Apply Agent Outputs
+#### 4.3 Apply Agent Outputs
 
 Use the analysis to inform proposal generation:
-- **proposal.md**: Use blueprint's affected areas, risks, dependencies
+- **proposal.md**: Use blueprint's affected areas, risks, dependencies — and grilling summary for scope/motivation
 - **tasks.md**: Use blueprint's implementation phases and task hints
-- **delta specs**: Use blueprint's OpenSpec integration recommendations
+- **delta specs**: Use blueprint's OpenSpec integration recommendations; use `CONTEXT.md` terms in scenario language
 - **design.md**: Use blueprint's component designs (if complex change)
 
-#### 3.4 Fallback (if agents unavailable)
+#### 4.4 Fallback (if agents unavailable)
 
 If agents cannot be invoked, gather information manually:
 - Read `.dev/project.md` for tech stack and conventions
@@ -75,7 +110,7 @@ If agents cannot be invoked, gather information manually:
 - Scan codebase for files that might be affected
 - Check recent git history for related changes
 
-#### 3.5 Save analysis.md
+#### 4.5 Save analysis.md
 
 Save the code-explorer output to `.dev/changes/{change-id}/analysis.md`.
 
@@ -86,7 +121,7 @@ This file documents:
 - Dependencies identified
 - Conventions to follow
 
-#### 3.6 Save blueprint.md
+#### 4.6 Save blueprint.md
 
 Save the code-architect output to `.dev/changes/{change-id}/blueprint.md`.
 
@@ -97,14 +132,14 @@ This file documents:
 - Interface specifications
 - Risks and mitigations
 
-#### 3.7 Update project.md
+#### 4.7 Update project.md
 
 Append/update the "Latest Analysis" section in `.dev/project.md` with:
 - Architecture summary from code-explorer
 - Key patterns discovered
 - Conventions extracted
 
-### 4. Create change folder structure
+### 5. Create change folder structure
 
 ```
 .dev/changes/{change-id}/
@@ -123,7 +158,7 @@ Use Bash:
 mkdir -p .dev/changes/{change-id}/specs
 ```
 
-### 5. Generate `proposal.md`
+### 6. Generate `proposal.md`
 
 Create `.dev/changes/{change-id}/proposal.md`:
 
@@ -169,7 +204,7 @@ Create `.dev/changes/{change-id}/proposal.md`:
 | {potential issue} | {how to handle} |
 ```
 
-### 6. Generate `tasks.md`
+### 7. Generate `tasks.md`
 
 Create `.dev/changes/{change-id}/tasks.md`:
 
@@ -211,7 +246,7 @@ Break down the change into logical phases and tasks. Each task should be:
 - Small enough to complete in one session
 - Independently verifiable
 
-### 7. Generate delta specs
+### 8. Generate delta specs
 
 Identify which spec domains are affected and create delta files.
 
@@ -260,7 +295,7 @@ Reason: {Why this is being removed}
 - REMOVED: Include reason for removal
 - Reference the spec-format.md and delta-format.md in skills for format details
 
-### 8. Generate `design.md` (if complex)
+### 9. Generate `design.md` (if complex)
 
 Only create if the change involves:
 - New architecture patterns
@@ -303,7 +338,7 @@ Only create if the change involves:
 {Security implications and mitigations}
 ```
 
-### 9. Output summary
+### 10. Output summary
 
 ```
 ## Proposal Created: {change-id}
@@ -317,6 +352,7 @@ Only create if the change involves:
 - .dev/changes/{change-id}/tasks.md
 - .dev/changes/{change-id}/specs/{domain}/spec.md
 {- .dev/changes/{change-id}/design.md (if created)}
+{- CONTEXT.md (created/updated during grilling)}
 
 ### Summary
 {Brief summary of the proposal}

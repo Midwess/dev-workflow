@@ -1,18 +1,30 @@
 ---
 name: minimax-codegen
-description: Use Minimax as a single-file code generator in OpenClaude. Use when the user gives a file path plus an intention for that file, or wants Minimax to rewrite a specific file without long analysis, review, or extra checking.
+description: Use Minimax as a single-file code generator in OpenClaude. Use when the user gives a file path plus an intention for that file and wants Claude to return a concise ready-to-run command instead of a long explanation.
 ---
 
 # Minimax Codegen Skill
 
-Use this skill to update one file by prompting Minimax with the exact file path, the current file contents, and the user's intended outcome.
+Use this skill to prepare one `openclaude` command for one file.
+
+Claude should stay terse:
+- default to returning only the command
+- add one short blocking note only when the command cannot be run yet
+- no long analysis, plan, or review
+
+Treat Minimax like a junior dev:
+- be explicit about the exact file
+- give direct instructions
+- keep scope narrow
+- do not ask it to explore, review, or think out loud
+- always tell it to respond concisely and not talk much
 
 ## When to Use
 
 Use this skill when:
 - the user gives a file path and asks Minimax to change that file
 - the user wants intention-driven code generation instead of a detailed edit plan
-- the user wants Minimax to generate code directly and concisely without extra review text
+- the user wants Claude to reply with a ready-to-run command, not a long explanation
 
 ## Workflow
 
@@ -20,22 +32,21 @@ Use this skill when:
 2. If the path is relative, resolve it from the repo root and then use that exact resolved path in the Minimax prompt.
 3. Read the current contents of that file before prompting Minimax.
 4. If the file does not exist, stop and ask for the correct path instead of guessing.
-5. Recommend an intention-focused request:
-   - the user does not need to specify exact code edits
-   - the user should describe what they want the file to accomplish
+5. Turn the user's intention into short direct instructions. Do not over-specify the diff unless needed.
 6. Build the Minimax prompt so it includes:
    - the exact file path
    - the current file contents
-   - the user's detailed intention
+   - the user's intended outcome
    - instructions to modify only that file
    - a strict output contract
-7. Run Minimax through the local `openclaude` CLI with:
+7. Default Claude output should be the ready-to-run command only. Avoid extra prose.
+8. Run Minimax through the local `openclaude` CLI with:
    - `ANTHROPIC_AUTH_TOKEN="$MINIMAX_API_KEY"`
    - `ANTHROPIC_BASE_URL="https://api.minimax.io/anthropic"`
    - `ANTHROPIC_MODEL="MiniMax-M2.7-highspeed"`
-   - `openclaude --verbose -p "$prompt" --output-format=text`
-8. If `text` fails, keep the raw `openclaude` output instead of discarding it.
-9. Apply the generated output only to the target file.
+   - `openclaude -p "$prompt" --output-format=text`
+9. If `text` fails, keep the raw `openclaude` output instead of discarding it.
+10. Apply the generated output only to the target file.
 
 ## Prerequisites
 
@@ -63,23 +74,27 @@ Also require these commands to exist locally:
 ## Prompting Rules
 
 Tell Minimax these points explicitly:
+- you are a junior dev updating exactly one file
 - use the exact file path provided
 - modify only that file
+- do not explore outside the task
 - output the full updated file contents first
-- then give a very short summary of what changed
+- then give a very short summary
 - no long explanation
 - no code review
 - no extra checks
+- keep the response concise
+- do not talk much
 
 Use a prompt with this shape:
 
 ````text
-You are updating exactly one file.
+You are a junior dev updating exactly one file.
 
 Target file path: /absolute/path/to/file.ext
 
-User intention:
-<detailed intention>
+Task:
+<short direct instruction from the user's intention>
 
 Current file contents:
 ```language
@@ -91,10 +106,10 @@ Requirements:
 - Use the exact target file path above.
 - Do not ask follow-up questions.
 - Do not review or analyze the code.
-- Do not explain at length.
+- Do not explain your reasoning.
 - Do not check the code.
 - Just generate the change.
-- Keep the response concise.
+- Keep the response concise. Do not talk much.
 - First output the full final contents for the target file.
 - After that, output a very short summary of what changed.
 ````
@@ -103,7 +118,6 @@ The request to Minimax should describe intent clearly, but does not need to spec
 
 ## Output
 
-End with:
-- the exact file path used
-- whether the file was updated
-- the concise Minimax change summary
+Default Claude output:
+- the command only
+- if blocked, one short sentence saying what is missing

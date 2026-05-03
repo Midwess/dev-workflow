@@ -159,18 +159,55 @@ For each pending task, in order:
 
 **Before starting a task:**
 - Display: `### Working on: Task {N} - {description}`
+- Extract the WHEN/THEN scenarios from the relevant delta spec — these are the behaviors to implement
+- List the behaviors you will test (confirm the most critical ones, not every edge case)
+- Skip-able tasks (setup, config, migrations) that have no testable behavior go straight to implementation — no forced test loop
 
-**During implementation:**
-- Follow the delta specs as requirements
-- Follow project conventions from `project.md`
-- Follow existing code patterns in the codebase
-- Write code that satisfies the WHEN/THEN scenarios
+**During implementation — TDD inner loop:**
+
+Each task is implemented as a series of vertical slices, one behavior at a time:
+
+```
+For each behavior identified from WHEN/THEN scenarios:
+
+  RED:    Write ONE failing test that describes exactly this behavior.
+          Test must:
+          - Use the public interface only (no internal collaborators)
+          - Describe WHAT the system does, not HOW
+          - Survive an internal refactor without changing
+
+  GREEN:  Write the minimal code needed to make this test pass.
+          Do not anticipate future behaviors. Do not add speculative code.
+
+  REFACTOR: Only after GREEN — clean up duplication, improve naming.
+            Never refactor while RED.
+            Run tests after each refactor step to stay GREEN.
+```
+
+**Anti-pattern — do NOT do this:**
+```
+WRONG: write test1, test2, test3 → then write impl1, impl2, impl3
+RIGHT: test1 → impl1 → test2 → impl2 → test3 → impl3
+```
+
+**Mocking rules:**
+- Mock only at system boundaries: external APIs, email/payment services, time, randomness
+- Never mock your own modules or internal collaborators
+- Prefer a real test DB over mocking the database layer
+
+**Per-behavior checklist:**
+```
+[ ] Test describes behavior, not implementation detail
+[ ] Test uses public interface only
+[ ] Test would survive an internal refactor
+[ ] Code is minimal for this test — nothing extra added
+```
 
 ---
 
 ### ⚠️ CRITICAL: Mark Task Complete After Each Task
 
-**After completing EACH task, you MUST update tasks.md immediately:**
+**After completing EACH task (all its behaviors are GREEN), update tasks.md immediately:**
 
 1. **Use the Edit tool** to change the checkbox from `- [ ]` to `- [x]`:
    ```
@@ -203,12 +240,15 @@ This is essential for:
 - Skip to next task if possible
 - Report blocker to user
 
+**Testing tasks in tasks.md (e.g. "3.1 Write unit tests"):**
+If the proposal includes a dedicated testing phase, treat those tasks as integration/e2e coverage that spans multiple behaviors — not as the first time tests get written. Behavioral tests should already exist from the TDD loop above.
+
 ### 4. Validation checks
 
 After completing major task groups:
-- Verify implementation matches delta specs
+- Verify implementation matches delta specs — every WHEN/THEN scenario should have a corresponding passing test
 - Check `.dev/project.md` compliance
-- Run tests if the project has a test command
+- Run the full test suite if the project has a test command
 - Note any deviations from specs in the Notes section
 
 ### 5. Progress tracking
@@ -291,7 +331,8 @@ If some tasks couldn't be completed:
 - Follow existing code patterns in the project
 - Follow `.dev/project.md` guidelines
 - Add appropriate error handling
-- Write code that's testable
+- Design interfaces for testability: prefer dependency injection, avoid hard-coded external clients
+- Tests verify behavior through public interfaces — never test implementation details or internal state
 
 ### Progress Updates (CRITICAL)
 
