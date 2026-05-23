@@ -1,7 +1,7 @@
 {
   "name": "dev-workflow",
-  "version": "1.2.0",
-  "description": "OpenSpec-style spec-driven development workflow with integrated code review",
+  "version": "1.4.0",
+  "description": "OpenSpec-style spec-driven development workflow with integrated code review, folder-based test flows, and a senior-qa/tester/investigator agent trio",
   "homepage": "https://github.com/midwess/.ai",
   "repository": "https://github.com/midwess/.ai",
   "keywords": [
@@ -10,6 +10,11 @@
     "code-review",
     "workflow",
     "proposals",
-    "specifications"
+    "specifications",
+    "test-flow",
+    "markdown-tests",
+    "senior-qa",
+    "tester",
+    "investigator"
   ]
 }

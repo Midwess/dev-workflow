@@ -90,6 +90,11 @@ For detailed format specifications:
 | `/dev-workflow:archive` | Archive and merge completed change |
 | `/dev-workflow:code-review` | Run automated code review |
 | `/dev-workflow:pr-submit` | Create PR with review |
+| `/dev-workflow:generate-test-flow` | Create a new folder-based test case |
+| `/dev-workflow:do-test-flow` | Execute test cases and record results |
+| `/dev-workflow:summary` | Aggregate test results into a readiness report |
+
+For folder-based markdown tests with metadata frontmatter, see the [test-flow](../test-flow/SKILL.md) skill.
 
 ## Workflow Overview
 
