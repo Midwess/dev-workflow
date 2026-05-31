@@ -119,6 +119,8 @@ Update the manifest for the runtime you changed:
 | `/dev-workflow:pr-submit` | Create PR with review |
 | `/dev-workflow:import-issue <source> <id>` | Import from GitHub or Confluence |
 | `/dev-workflow:generate-tests <change-id>` | Generate test stubs from specs |
+| `/dev-workflow:audit <aspect description>` | Create a re-runnable audit charter (`case.md`) for an aspect to keep healthy |
+| `/dev-workflow:trigger-audit <path>` | Run a charter against current code; write a dated `result-<date>.md` verdict |
 
 ### Review Agents
 
@@ -129,6 +131,12 @@ Update the manifest for the runtime you changed:
 - **test-analyzer** - Test coverage gaps (thorough mode)
 - **comment-analyzer** - Comment accuracy (thorough mode)
 - **code-simplifier** - Code clarity improvements (thorough mode)
+
+### Audit Agents
+
+- **audit-scout** (opus) - Turns an audit request into a durable `case.md` charter; delegates file-scoping to audit-scanner, validates the code itself
+- **audit-scanner** (sonnet) - Cheap file-scoping pass; returns a ranked candidate file list for an aspect (no findings)
+- **auditor** (opus) - Runs a charter against current code, judges invariants, writes the dated `result-<date>.md` verdict
 
 ## Prerequisites
 
