@@ -1,19 +1,17 @@
 # dev-workflow
 
-OpenSpec-style spec-driven development workflow plugin suite for Claude Code and Codex with integrated code review, GitHub integration, and test generation.
+OpenSpec-style spec-driven development workflow plugin for Claude Code. Includes integrated code review, GitHub integration, folder-based test flows, re-runnable code audits, and a senior-qa / tester / investigator / auditor agent suite.
 
 ## Quick Start
 
-### Claude Code
-
 ```bash
-# 1. Add the marketplace
-/plugin marketplace add midwess/.ai
+# 1. Add the marketplace (points at this repo)
+/plugin marketplace add dev-logs/dev-workflow
 
 # 2. Install the plugin
-/plugin install dev-workflow@midwess
+/plugin install dev-workflow@midwess-dev
 
-# 3. Initialize in your project
+# 3. Initialize the workflow in your project
 /dev-workflow:init
 
 # 4. Create a change proposal
@@ -27,40 +25,59 @@ OpenSpec-style spec-driven development workflow plugin suite for Claude Code and
 /dev-workflow:pr-submit
 ```
 
-### Codex
-
-```bash
-# 1. Clone the repo locally
-git clone https://github.com/midwess/.ai ~/midwess/.ai
-cd ~/midwess/.ai
-
-# 2. Start Codex in the repo
-codex
-
-# 3. In Codex, open the plugin directory and install dev-workflow
-/plugins
-
-# 4. Use the proposal skill
-$dev-workflow:proposal Add user authentication with OAuth
-```
-
 ## Prerequisites
 
-- [Claude Code](https://claude.ai/code) or [Codex](https://developers.openai.com/codex/plugins/) installed
+- [Claude Code](https://claude.ai/code) installed
 - GitHub CLI (`gh`) authenticated via `gh auth login`
 
-## Platform Support
+## Installation
 
-- **Claude Code**: Full plugin support via `.claude-plugin/marketplace.json` and `plugins/dev-workflow/.claude-plugin/plugin.json`
-- **Codex**: Dedicated Codex plugin root via `.agents/plugins/marketplace.json` and `plugins/dev-workflow-codex/.codex-plugin/plugin.json`
-- **Hooks**: Existing hook automation remains Claude-specific for now
+### Add the marketplace
+
+The marketplace name is `midwess-dev` (defined in `.claude-plugin/marketplace.json`) and the plugin is bundled inside this repository.
+
+```bash
+/plugin marketplace add dev-logs/dev-workflow
+```
+
+If you want to test a local checkout of this repo instead of the GitHub remote:
+
+```bash
+/plugin marketplace add /absolute/path/to/dev-workflow
+```
+
+### Install the plugin
+
+```bash
+/plugin install dev-workflow@midwess-dev
+```
+
+### Update
+
+```bash
+/plugin reinstall dev-workflow@midwess-dev
+```
+
+### Uninstall
+
+```bash
+/plugin uninstall dev-workflow@midwess-dev
+```
+
+### Verify
+
+In any project, run:
+
+```bash
+/dev-workflow:status
+```
+
+You should see the workflow state overview.
 
 ## Workflow Overview
 
 1. **Initialize** - `/dev-workflow:init` sets up the `.dev/` folder structure
-2. **Propose**
-   Claude Code: `/dev-workflow:proposal` or `/dev-workflow:proposal-wizard`
-   Codex: `$dev-workflow:proposal`
+2. **Propose** - `/dev-workflow:proposal` or `/dev-workflow:proposal-wizard`
 3. **Implement** - `/dev-workflow:apply` works through tasks with progress tracking
 4. **Review** - `/dev-workflow:code-review` runs automated review with confidence scoring
 5. **Archive** - `/dev-workflow:archive` merges specs and finalizes changes
@@ -95,24 +112,8 @@ $dev-workflow:proposal Add user authentication with OAuth
 | `/dev-workflow:status` | Show workflow state overview |
 | `/dev-workflow:import-issue <source> <id>` | Import from GitHub or Confluence |
 | `/dev-workflow:generate-tests <change-id>` | Generate test stubs from specs |
-
-## Codex Skills
-
-| Skill | Description |
-|------|-------------|
-| `$dev-workflow:init` | Initialize the `.dev/` workspace in Codex |
-| `$dev-workflow:proposal` | Create a dev-workflow change proposal and supporting files in Codex |
-| `$dev-workflow:proposal-wizard` | Create a proposal through a guided flow in Codex |
-| `$dev-workflow:apply` | Implement tasks from an approved change proposal in Codex |
-| `$dev-workflow:code-review` | Run the multi-agent review workflow in Codex |
-| `$dev-workflow:archive` | Archive a completed change and merge its delta specs |
-| `$dev-workflow:undo-archive` | Restore an archived change to active work |
-| `$dev-workflow:pr-submit` | Run review and create a pull request in Codex |
-| `$dev-workflow:status` | Show current dev-workflow state in Codex |
-| `$dev-workflow:list` | List active or archived changes in Codex |
-| `$dev-workflow:show` | Show details for one change in Codex |
-| `$dev-workflow:import-issue` | Import a GitHub issue or PRD into dev-workflow |
-| `$dev-workflow:generate-tests` | Generate tests from a proposal or spec domain |
+| `/dev-workflow:audit <aspect>` | Create a re-runnable audit charter (`case.md`) |
+| `/dev-workflow:trigger-audit <path>` | Run a charter against current code |
 
 ## Folder Structure
 
@@ -141,7 +142,7 @@ After running `/dev-workflow:init`:
 The code review uses specialized agents with confidence scoring:
 
 **Core Agents (all modes):**
-- **project-guidelines-auditor** - AGENTS.md / CLAUDE.md / project guideline compliance
+- **claude-md-auditor** - CLAUDE.md / AGENTS.md guideline compliance
 - **bug-detector** - Logic errors, null handling, security
 - **history-analyzer** - Git history conflicts
 - **spec-validator** - Spec format validation
@@ -150,6 +151,15 @@ The code review uses specialized agents with confidence scoring:
 - **test-analyzer** - Test coverage gaps
 - **comment-analyzer** - Comment accuracy
 - **code-simplifier** - Code clarity improvements
+
+## Audit Agents
+
+- **audit-scout** (opus) - Turns an audit request into a durable `case.md` charter
+- **audit-scanner** (sonnet) - Cheap file-scoping pass; returns a ranked candidate list
+- **auditor** (opus) - Runs a charter against current code, writes dated `result-<date>.md` verdict
+- **investigator** - Diagnoses root cause when a test flow fails
+- **senior-qa** - Authors folder-based test cases
+- **tester** - Executes test cases against a live or local system
 
 ## AI-Assisted Planning
 
@@ -165,54 +175,15 @@ The code review uses specialized agents with confidence scoring:
 - Plans implementation phases
 - Output saved to: `blueprint.md`
 
-## Installation
-
-### Claude Code
-
-```bash
-/plugin marketplace add midwess/.ai
-/plugin install dev-workflow@midwess
-```
-
-### Codex
-
-```bash
-git clone https://github.com/midwess/.ai ~/midwess/.ai
-cd ~/midwess/.ai
-codex
-# then run /plugins and install dev-workflow from the repo marketplace
-# then use:
-$dev-workflow:proposal Add user authentication with OAuth
-```
-
-### Verify Installation
-
-```bash
-$dev-workflow:proposal Add a small test proposal
-```
-
-## Updating
-
-```bash
-# Pull the latest repo changes
-cd ~/midwess/.ai && git pull
-
-# Claude Code: reinstall the plugin
-/plugin reinstall dev-workflow@midwess
-
-# Codex: restart Codex so the local marketplace reloads the plugin files
-```
-
 ## Documentation
 
-See [plugins/dev-workflow/README.md](./plugins/dev-workflow/README.md) for the Claude Code plugin and [plugins/dev-workflow-codex/README.md](./plugins/dev-workflow-codex/README.md) for the Codex plugin.
-
-The plugin docs cover:
+See [plugins/dev-workflow/README.md](./plugins/dev-workflow/README.md) for the full plugin documentation, covering:
 - Detailed command options
 - Spec format reference
 - Delta notation guide
 - Hook configurations
 - Test generation
+- Audit flow
 
 ## Contributing
 
